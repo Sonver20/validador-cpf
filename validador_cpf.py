@@ -5,7 +5,7 @@ validacao = False
 if len(recebe) != 11:
     print('CPF invalido')
 else:
-    if recebe.isnumeric():
+    if recebe.isdigit():
         cpf = []
         validacao = True
         for n in recebe:
