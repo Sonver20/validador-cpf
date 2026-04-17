@@ -28,7 +28,7 @@ if validacao:
     else:
         resto = 0
     if resto != cpf[9]:
-        print(f'CPF invalido!')
+        print('CPF invalido!')
     else:
         verifica = True
     if verifica:
@@ -46,4 +46,7 @@ if validacao:
         if resto != cpf[10]:
             print('CPF invalido!')
         else:
-            print(f'Seu CPF é valido!')
+            if cpf[0] != cpf[1]:
+                print('Seu CPF é valido!')
+            else:
+                print('CPF invalido!')
