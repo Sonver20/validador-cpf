@@ -46,7 +46,7 @@ if validacao:
         if resto != cpf[10]:
             print('CPF invalido!')
         else:
-            if cpf[0] != cpf[1]:
-                print('Seu CPF é valido!')
-            else:
+            if cpf.count(cpf[0]) == 11:
                 print('CPF invalido!')
+            else:
+                print('Seu CPF é valido!')
