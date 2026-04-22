@@ -1,36 +1,54 @@
-def validate_cpf(cpf):
-    """
-    Validate a Brazilian CPF number.
+recebe = input('Seu CPF: ');
+recebe = recebe.replace('.','').replace('-','');
+validacao = False;
 
-    A CPF is a national identification number used in Brazil, composed of 11 digits.
-    The last two digits are check digits, which are calculated using the first nine digits.
-    """
-    # Remove non-digit characters from the input
-    cpf = ''.join(filter(str.isdigit, str(cpf)))
+# Check if the length of the CPF is 11 digits
+if len(recebe) != 11:
+    print('CPF invalido');
+else:
+    # Check if the input contains only digits
+    if recebe.isdigit():
+        cpf = [];
+        validacao = True;
+        # Convert each character to an integer and store in the cpf list
+        for n in recebe:
+            a = int(n);
+            cpf.append(a);
+    else:
+        print('CPF invalido');
 
-    # Check for length
-    if len(cpf) != 11:
-        return False
+# Function to perform CPF validation calculations
 
-    # Check for repeated digits
-    if cpf in ("00000000000", "11111111111", "22222222222", "33333333333", "44444444444", "55555555555", "66666666666", "77777777777", "88888888888", "99999999999"):
-        return False
+def CalculoCPF(qntd, mult):
+    soma = 0;
+    # Sum the multiplication of each digit by a decreasing multiplier
+    for c in range(qntd):
+        calculo = cpf[c] * mult;
+        soma += calculo;
+        mult -= 1;
+    resto = soma % 11;
+    # Calculate the verification digit
+    if resto >= 2:
+        resto = 11 - resto;
+    else:
+        resto = 0;
 
-    # Calculate the first check digit
-    sum1 = sum(int(cpf[i]) * ((10 - i) for i in range(9)) )
-    digit1 = (sum1 * 10) % 11
-    digit1 = 0 if digit1 == 10 else digit1
+    # Compare the calculated verification digit with the actual stored digit
+    if resto != cpf[qntd]:
+        print('CPF invalido!');
+    else:
+        # Check if all digits in the CPF are the same
+        if cpf.count(cpf[0]) == 11:
+            print('CPF invalido!');
+        else:
+            return True;
 
-    # Calculate the second check digit
-    sum2 = sum(int(cpf[i]) * ((11 - i) for i in range(10)))
-    digit2 = (sum2 * 10) % 11
-    digit2 = 0 if digit2 == 10 else digit2
-
-    # Compare check digits with the last two digits of the CPF
-    return cpf[-2:] == '{}{}'.format(digit1, digit2)
-
-# Example usage
-if __name__ == '__main__':
-    test_cpfs = ['12345678909', '11144477735']
-    for cpf in test_cpfs:
-        print(f'CPF {cpf} is valid: {validate_cpf(cpf)})
+# First step of validation using the first 9 digits
+if validacao:
+    passo_1 = CalculoCPF(9, 10);
+    # Second step of validation using the first 10 digits
+    if passo_1:
+        passo_2 = CalculoCPF(10, 11);
+        # If both validations pass, the CPF is valid
+        if passo_2:
+            print('Seu CPF é valido!')
