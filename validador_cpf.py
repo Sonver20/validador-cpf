@@ -1,31 +1,36 @@
-# validador_cpf.py
+def validate_cpf(cpf):
+    """
+    Validate a Brazilian CPF number.
 
-"""
-This module contains a function to validate Brazilian CPF (Cadastro de Pessoas Físicas) numbers.
+    A CPF is a national identification number used in Brazil, composed of 11 digits.
+    The last two digits are check digits, which are calculated using the first nine digits.
+    """
+    # Remove non-digit characters from the input
+    cpf = ''.join(filter(str.isdigit, str(cpf)))
 
-## CPF Validation Algorithm
+    # Check for length
+    if len(cpf) != 11:
+        return False
 
-1. **Format**: The CPF is a unique identifier for Brazilian citizens, consisting of 11 digits (XXX.XXX.XXX-YY). The last two digits are check digits.
+    # Check for repeated digits
+    if cpf in ("00000000000", "11111111111", "22222222222", "33333333333", "44444444444", "55555555555", "66666666666", "77777777777", "88888888888", "99999999999"):
+        return False
 
-2. **Input**: The function accepts a string input, which should contain only the numbers of the CPF (no formatting characters).
+    # Calculate the first check digit
+    sum1 = sum(int(cpf[i]) * ((10 - i) for i in range(9)) )
+    digit1 = (sum1 * 10) % 11
+    digit1 = 0 if digit1 == 10 else digit1
 
-3. **Initial Check**: The function first checks if the input has the correct length (11 digits) and if it consists of only numbers. If not, it returns `False`.
+    # Calculate the second check digit
+    sum2 = sum(int(cpf[i]) * ((11 - i) for i in range(10)))
+    digit2 = (sum2 * 10) % 11
+    digit2 = 0 if digit2 == 10 else digit2
 
-4. **Repetition Check**: The algorithm checks for repetitive patterns, such as '00000000000', which are not valid CPFs.
+    # Compare check digits with the last two digits of the CPF
+    return cpf[-2:] == '{}{}'.format(digit1, digit2)
 
-5. **Calculation of Check Digits**:
-   - The first check digit is calculated using the first 9 digits of the CPF:
-     - Multiply each digit by a weight factor starting from 10 down to 2.
-     - Sum the results and divide by 11. The remainder determines the check digit (0-9).
-   - The second check digit is calculated similarly but uses the first 10 digits (including the first check digit).
-
-6. **Verification**: The computed check digits are compared to the provided ones. If they match, the CPF is valid; otherwise, it's invalid.
-
-Returns:
-- `True` if the CPF is valid.
-- `False` if the CPF is invalid.
-"""
-
-def validar_cpf(cpf):
-    # Implementation of the CPF validation logic goes here
-    pass
+# Example usage
+if __name__ == '__main__':
+    test_cpfs = ['12345678909', '11144477735']
+    for cpf in test_cpfs:
+        print(f'CPF {cpf} is valid: {validate_cpf(cpf)})
