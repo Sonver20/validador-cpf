@@ -1,5 +1,5 @@
-def validar_cpf(text):
-    recebe = input(text).replace('.','').replace('-','').strip()
+def validar_cpf(text: str) -> bool:
+    recebe = text.replace('.','').replace('-','').strip()
     
     if len(recebe) != 11 or not recebe.isdigit():
         raise ValueError('CPF invalido!')
